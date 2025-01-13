@@ -3,34 +3,61 @@ import { RiLetterSpacing2 } from "react-icons/ri";
 import { IoMoonOutline } from "react-icons/io5";
 import { FaSun } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
-import './style.css'
 import { useState } from "react";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import './style.css'
+import { useQuery } from "react-query";
+import { DictionaryAnswer, DictionaryAnswerWithError } from "./interface";
+import { toast, Toaster } from "sonner";
 
 export default function App() {
 
     const [sourceOfLetter, setSourceOfLetter] = useState<string>('serif')
 
-    const [keyword, setKeyword] = useState<string>('')
-    const query = new QueryClient
+    let timeBeforeSearching: ReturnType<typeof setTimeout>;
+    const [keyword, setKeyword] = useState<string | undefined>(undefined)
+    const [result, setResult] = useState<DictionaryAnswer | DictionaryAnswerWithError | undefined>(undefined)
+
+    const doublingSetWordReference = (value: string) => {
+        if (timeBeforeSearching) clearTimeout(timeBeforeSearching)
+
+        timeBeforeSearching = setTimeout(() => {
+            const wordfiltered = value
+                .trim()
+                .toLocaleLowerCase()
+                .replace(/[\W\s]/g, '')
+
+            if (wordfiltered.length <= 0) return
+            setKeyword(wordfiltered)
+
+        }, 1000)
+    }
 
     const { isLoading, isError } = useQuery({
         queryKey: [keyword],
         queryFn: async () => fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${keyword}`, { method: 'GET' })
             .then(res => {
-                if (!res.ok) throw new Error('Error fetching data')
+                if (!res.ok) {
+                    toast.error('Hubo un problema al procesar la solicitud de dictionaryapi.dev')
+                    throw new Error('Error fetching data')
+                }
                 return res.json()
             }),
-        cacheTime: 0,
-        enabled: keyword!!,
-        onError:()=>{},
-        onSuccess:()=>{},
+        enabled: !!keyword,
+        staleTime: 1800000,
+        cacheTime: 1800000,
+        onError: () => { },
+        onSuccess: (newData) => {
+            console.log(newData);
+        },
         refetchOnWindowFocus: false,
         retry: 2,
-        retryDelay:2000,
+        retryDelay: 2000,
     })
 
     return (<>
+        <Toaster position="bottom-center" />
+
+
         <header style={{ fontFamily: `${sourceOfLetter}` }}>
             <a href="/" rel="noopener noreferrer">
                 <GiBlackBook />
@@ -61,22 +88,22 @@ export default function App() {
 
         </header>
 
-        <QueryClientProvider client={query}>
-            <main style={{ fontFamily: `${sourceOfLetter}` }}>
-                <label htmlFor="">
-                    <input type="search" />
-                    <CiSearch />
-                </label>
+        <main style={{ fontFamily: `${sourceOfLetter}` }}>
+            <label htmlFor="">
+                <input type="search" onChange={(e) => doublingSetWordReference(e.target.value)} />
+                <CiSearch />
+            </label>
 
+            <div>
                 <div>
-                    <div>
-                        <span>{keyword.length <= 0 ? '¡Bienvenido! Busca una palabra' : keyword}</span>
-                        {keyword && <span>{keyword}</span>}
-                    </div>
-                    <button type="button">▶</button>
+                    <span>{keyword ? keyword : '¡Bienvenido! Busca una palabra.'}</span>
+                    {keyword && <span>{keyword}</span>}
                 </div>
-            </main>
-        </QueryClientProvider>
+                <button type="button">▶</button>
+            </div>
+
+            {isLoading ? <span>Cargando datos de busqueda</span> : isError && <span>Ocurrió un error</span>}
+        </main>
 
     </>)
 }
