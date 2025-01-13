@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Asegura que el padding y el border se incluyan en el tamaño total del elemento */
+}
+
+@font-face {
+  font-family: 'Retrograde';
+  src: url('../public/Retrograde.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+/* ROOT se encarga del diseño en todo el archivo */
+:root {
+  background-color: rgb(26, 26, 26);
+  font-family: 'Retrograde', 'Times New Roman', Times, serif;
+  color: white;
+  overflow-x: hidden;
+
+  scrollbar-gutter: stable;
+}
+
+/* Cuerpo, aquí se centra la app. Como es el cuerpo ya tiene el ancho */
+body {
+  margin: 0;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  min-height: 100vh;
+
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/* Todo el contenido dentro de los componentes, se centran los componentes. */
+#app {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 0;
+}
