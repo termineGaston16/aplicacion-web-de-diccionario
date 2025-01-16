@@ -7,7 +7,8 @@ import { useState } from "react";
 import './style.css'
 import { useQuery } from "react-query";
 import { DictionaryAnswer, DictionaryAnswerWithError } from "./interface";
-import { toast, Toaster } from "sonner";
+import { ResultsNotFound, GenericError } from "./ERRORES/errors";
+import ShowResults from "./RESULTS/showResults";
 
 export default function App() {
 
@@ -15,7 +16,7 @@ export default function App() {
 
     let timeBeforeSearching: ReturnType<typeof setTimeout>;
     const [keyword, setKeyword] = useState<string | undefined>(undefined)
-    const [result, setResult] = useState<DictionaryAnswer | DictionaryAnswerWithError | undefined>(undefined)
+    const [result, setResult] = useState<DictionaryAnswer[] | DictionaryAnswerWithError | undefined>(undefined)
 
     const doublingSetWordReference = (value: string) => {
         if (timeBeforeSearching) clearTimeout(timeBeforeSearching)
@@ -34,30 +35,39 @@ export default function App() {
 
     const { isLoading, isError } = useQuery({
         queryKey: [keyword],
-        queryFn: async () => fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${keyword}`, { method: 'GET' })
-            .then(res => {
-                if (!res.ok) {
-                    toast.error('Hubo un problema al procesar la solicitud de dictionaryapi.dev')
-                    throw new Error('Error fetching data')
+        queryFn: async () => {
+            try {
+                const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${keyword}`);
+
+                if (!res.ok && res.status === 404) {
+                    const errorJson = await res.json();
+                    throw new ResultsNotFound(errorJson);
                 }
-                return res.json()
-            }),
-        enabled: !!keyword,
-        staleTime: 1800000,
-        cacheTime: 1800000,
-        onError: () => { },
-        onSuccess: (newData) => {
-            console.log(newData);
+
+                if (!res.ok) {
+                    throw new GenericError('An unexpected error occurred');
+                }
+
+                return await res.json();
+            } catch (error) {
+                throw error
+            }
         },
-        refetchOnWindowFocus: false,
-        retry: 2,
-        retryDelay: 2000,
-    })
+        enabled: !!keyword,
+        cacheTime: 0,
+        retry: 0,
+        onError: (error) => {
+            if (error instanceof ResultsNotFound) {
+                setResult(error.objectError);
+            } else if (error instanceof GenericError) {
+                setResult(undefined)
+            }
+        },
+        onSuccess: (newData) => { setResult(newData) },
+        refetchOnWindowFocus: false
+    });
 
     return (<>
-        <Toaster position="bottom-center" />
-
-
         <header style={{ fontFamily: `${sourceOfLetter}` }}>
             <a href="/" rel="noopener noreferrer">
                 <GiBlackBook />
@@ -94,16 +104,17 @@ export default function App() {
                 <CiSearch />
             </label>
 
-            <div>
-                <div>
-                    <span>{keyword ? keyword : '¡Bienvenido! Busca una palabra.'}</span>
-                    {keyword && <span>{keyword}</span>}
-                </div>
-                <button type="button">▶</button>
-            </div>
-
-            {isLoading ? <span>Cargando datos de busqueda</span> : isError && <span>Ocurrió un error</span>}
+            {
+                !result
+                    ?
+                    <span>¡Bienvenido! Busca una palabra.</span>
+                    :
+                    <ShowResults
+                        isError={isError}
+                        isLoading={isLoading}
+                        result={result}
+                    />
+            }
         </main>
-
     </>)
 }

@@ -14,15 +14,11 @@ export interface DictionaryAnswer {
         {
             definition: string,
             example: string,
-            synonyms: string[],
-            antonyms: string[]
-        }[]
+        }[],
+        synonyms: string[],
+        antonyms: string[]
 
     }[],
-    license: {
-        name: string,
-        url: string
-    },
     sourceUrls: string[]
 }
 
