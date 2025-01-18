@@ -99,7 +99,7 @@ export default function App() {
         </header>
 
         <main style={{ fontFamily: `${sourceOfLetter}` }}>
-            <label htmlFor="">
+            <label>
                 <input type="search" onChange={(e) => doublingSetWordReference(e.target.value)} />
                 <CiSearch />
             </label>
