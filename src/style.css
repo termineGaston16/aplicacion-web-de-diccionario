@@ -15,9 +15,9 @@
 
 /* ROOT se encarga del diseño en todo el archivo */
 :root {
-  background-color: rgb(26, 26, 26);
+  background-color: white;
   font-family: 'Retrograde', 'Times New Roman', Times, serif;
-  color: white;
+  color: rgb(47, 47, 47);
   overflow-x: hidden;
 
   scrollbar-gutter: stable;

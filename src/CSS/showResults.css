@@ -1,0 +1,211 @@
+.ShowResults__isLoading {
+    width: clamp(25px, 10vw, 120px);
+    aspect-ratio: 1/1;
+    transform: translateY(50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ShowResults__isLoading__textMessage {
+    font-weight: 700;
+}
+
+.ShowResults__isLoading__icon {
+    width: 60px;
+    height: 60px;
+    transition: .3s;
+    animation: animationLoadingIcon .7s ease-in-out infinite;
+}
+
+@keyframes animationLoadingIcon {
+    0% {
+        width: 60px;
+        height: 60px;
+    }
+
+    50% {
+        color: rgb(135, 135, 135);
+        width: 70px;
+        height: 70px;
+    }
+
+    100% {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* ---------------------  SHOWS RESULTS  --------------------- */
+
+.ShowResults__results {
+    width: 80%;
+    height: auto;
+    list-style: none;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 50px;
+    text-align: start;
+}
+
+.ShowResults__results__item {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.ShowResults__results__item__word {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ShowResults__results__item__word__content {
+    width: 90%;
+
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ShowResults__results__item__word__content__world-span {
+    font-size: clamp(20px, 5vw, 60px);
+    font-weight: 700;
+
+    color: rgb(18, 18, 18)
+}
+
+.ShowResults__results__item__word__content__select_world-scund {
+    width: clamp(100px, 15vw, 180px);
+    margin-left: 5%;
+
+
+    border: none;
+    outline: none;
+    font-size: clamp(10px, 2vw, 24px);
+    color: rgb(27, 218, 218);
+    cursor: pointer;
+}
+
+.ShowResults__results__item__word__audio {
+    border: none;
+
+    width: clamp(50px, 8vw, 95px);
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 176, 176);
+
+    background-color: rgb(172, 249, 249);
+    font-size: 20px;
+    cursor: pointer;
+    transition: .3s;
+    padding-left: .5%;
+}
+
+.no-audio {
+    opacity: 0.3;
+}
+
+
+
+
+
+.ShowResults__results__item__complements {
+    width: 100%;
+}
+
+.ShowResults__results__item__complements__list {
+    width: 100%;
+
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.ShowResults__results__item__complements__list__item{
+    width: 100%;
+}
+
+.ShowResults__results__item__complements__list__item__partOfSpeech {
+    width: 100%;
+
+    font-size: 2vw;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 600;
+    margin: 2%;
+    color: rgb(48, 178, 239);
+
+}
+
+.ShowResults__results__item__complements__list__item__definitions {
+    width: 100%;
+    margin-left: 4%;
+
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.ShowResults__results__item__complements__list__item__definitions__def{
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+
+    border-bottom: 1px solid rgb(161, 161, 161);
+}
+
+.ShowResults__results__item__complements__list__item__definitions__def__p__title{
+    font-weight: 800;
+    color: rgb(129, 239, 252);
+}
+
+.ShowResults__results__item__complements__list__item__list__synonyms{
+    list-style-type: none;
+    margin: 2% 7%;
+
+    width: 100%;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ShowResults__results__item__complements__list__item__list__synonyms__word__title{
+    color: rgb(47, 0, 255);
+    font-weight: 900;
+    font-style: italic;
+}
+
+.ShowResults__results__item__complements__font{
+    color: rgb(45, 180, 253);
+    font-size: clamp(10px, 4vw, 15px);
+}
+
+.ShowResults__results__item__complements__font__arcor{
+    color: rgb(45, 180, 253);
+    font-size: clamp(10px, 4vw, 15px);
+}
