@@ -3,7 +3,7 @@ import { RiLetterSpacing2 } from "react-icons/ri";
 import { IoMoonOutline } from "react-icons/io5";
 import { FaSun } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { DictionaryAnswer, DictionaryAnswerWithError } from "./interface";
 import { ResultsNotFound, GenericError } from "./ERRORES/errors";
@@ -17,6 +17,11 @@ export default function App() {
 
     const [sourceOfLetter, setSourceOfLetter] = useState<string>('serif')
     const [backgroundTheme, setBackgroundTheme] = useState<string>('light')
+    useEffect(() => {
+        if (backgroundTheme === 'dark') return document.body.classList.add('dark-mode')
+        return document.body.classList.remove('dark-mode')
+    }, [backgroundTheme])
+
 
     let timeBeforeSearching: ReturnType<typeof setTimeout>;
     const [keyword, setKeyword] = useState<string | undefined>(undefined)
@@ -131,7 +136,7 @@ export default function App() {
         <main
             className="app-main"
             style={{ fontFamily: `${sourceOfLetter}` }}>
-                
+
             <div className="app-main__label-search">
                 <input
                     className="app-main__input-search"

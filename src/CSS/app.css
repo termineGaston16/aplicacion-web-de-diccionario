@@ -15,7 +15,7 @@
 }
 
 .app-header__ancla {
-    width: 100%;
+    width: clamp(130px, 18vw, 216px);
     height: 100%;
 
     display: flex;
@@ -193,3 +193,4 @@
 
     text-align: center;
 }
+
